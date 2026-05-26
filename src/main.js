@@ -1,6 +1,9 @@
 import Phaser from 'phaser';
 import { GAME_CONFIG } from './config.js';
-import GameScene from './scenes/GameScene.js';
+import PreloadScene  from './scenes/PreloadScene.js';
+import MenuScene     from './scenes/MenuScene.js';
+import GameScene     from './scenes/GameScene.js';
+import GameOverScene from './scenes/GameOverScene.js';
 
 const config = {
   type: Phaser.AUTO,
@@ -10,11 +13,9 @@ const config = {
   parent: 'game-container',
   physics: {
     default: 'arcade',
-    arcade: {
-      debug: false
-    }
+    arcade: { debug: false }
   },
-  scene: [GameScene]
+  scene: [PreloadScene, MenuScene, GameScene, GameOverScene]
 };
 
 new Phaser.Game(config);

@@ -4,13 +4,34 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Qhapaq Ñan - Prototipo</title>
+    <title>Qhapaq Ñan - Avance 1</title>
+    <style>
+        body {
+            margin: 0;
+            background: #1a0e00;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            font-family: sans-serif;
+            color: #ffcc00;
+        }
+        p {
+            max-width: 900px;
+            text-align: center;
+            margin-bottom: 12px;
+            font-size: 15px;
+            color: #ccaa66;
+        }
+        #game-container canvas {
+            display: block;
+        }
+    </style>
 </head>
 
 <body>
-    <p>Los Chasquis eran mensajeros del Imperio Inca que corrían largas distancias esquivando la culebra de
-        <b>GALILEO</b>
-    </p>
+    <p>Los Chasquis eran mensajeros del Imperio Inca que corrían largas distancias por el <b>Qhapaq Ñan</b>, el gran camino inca, esquivando todo obstáculo en su camino.</p>
     <div id="game-container"></div>
 
     <script type="module" src="/src/main.js"></script>

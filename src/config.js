@@ -1,21 +1,23 @@
 export const GAME_CONFIG = {
   width: 900,
   height: 500,
-  backgroundColor: '#1e1e1e',
+  backgroundColor: '#2d1b00',
 
-  lanes: [150, 250, 350],
+  lanes: [120, 250, 380],
 
   player: {
     x: 150,
-    width: 50,
-    height: 60,
-    color: 0xffcc00
+    width: 40,
+    height: 64,
+    texture: 'chasqui'
   },
 
   obstacle: {
-    width: 50,
-    height: 60,
-    speed: 250,
-    color: 0xff3333
+    width: 44,
+    height: 64,
+    speedBase: 220,
+    speedMax: 520,
+    speedIncrement: 18,
+    texture: 'conquistador'
   }
 };
