@@ -5,6 +5,8 @@ import Player from '../entities/Player.js';
 import ObstacleManager from '../managers/ObstacleManager.js';
 import BackgroundManager from '../managers/BackgroundManager.js';
 import ScoreManager from '../managers/ScoreManager.js';
+import InputManager from '../managers/InputManager.js';
+import VoiceCommandManager from '../managers/VoiceCommandManager.js';
 
 import Hud from '../ui/Hud.js';
 
@@ -27,19 +29,35 @@ export default class GameScene extends Phaser.Scene {
 
     this.obstacleManager = new ObstacleManager(this);
 
+    this.inputManager = new InputManager(this, {
+      onMoveUp: () => this.player.moveUp(),
+      onMoveDown: () => this.player.moveDown(),
+      onToggleVoice: () => this.voiceCommandManager.toggle()
+    });
+
+    this.voiceCommandManager = new VoiceCommandManager({
+      onCommand: (command) => {
+        this.inputManager.handleVoiceCommand(command);
+      },
+      onStatusChange: (status) => {
+        this.hud.updateVoiceStatus(status);
+      },
+      onError: (error) => {
+        console.warn('Error de voz:', error);
+      }
+    });
+
     this.physics.add.overlap(
       this.player.sprite,
       this.obstacleManager.group,
       () => this.endGame()
     );
-
-    this.cursors = this.input.keyboard.createCursorKeys();
   }
 
   update(time, delta) {
     if (this.gameOver) return;
 
-    this.handleInput();
+    this.inputManager.update();
 
     this.scoreManager.addTime(delta);
 
@@ -54,20 +72,13 @@ export default class GameScene extends Phaser.Scene {
     );
   }
 
-  handleInput() {
-    if (Phaser.Input.Keyboard.JustDown(this.cursors.up)) {
-      this.player.moveUp();
-    }
-
-    if (Phaser.Input.Keyboard.JustDown(this.cursors.down)) {
-      this.player.moveDown();
-    }
-  }
-
   endGame() {
     if (this.gameOver) return;
 
     this.gameOver = true;
+
+    this.inputManager.disable();
+    this.voiceCommandManager.stop();
 
     this.player.die();
     this.obstacleManager.stopAll();

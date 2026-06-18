@@ -20,6 +20,13 @@ export default class Hud {
         color: '#cc8800'
       })
       .setDepth(10);
+
+    this.voiceText = scene.add
+      .text(20, 66, 'Voz: presiona V', {
+        fontSize: '15px',
+        color: '#ffffff'
+      })
+      .setDepth(10);
   }
 
   update(score, speedLevel) {
@@ -27,8 +34,20 @@ export default class Hud {
     this.speedText.setText('Vel: ' + speedLevel);
   }
 
+  updateVoiceStatus(status) {
+    const labels = {
+      unsupported: 'Voz: no soportado',
+      listening: 'Voz: escuchando',
+      stopped: 'Voz: apagado',
+      error: 'Voz: error'
+    };
+
+    this.voiceText.setText(labels[status] || 'Voz: presiona V');
+  }
+
   destroy() {
     this.scoreText.destroy();
     this.speedText.destroy();
+    this.voiceText.destroy();
   }
 }
