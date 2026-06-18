@@ -3,6 +3,7 @@ import { GAME_CONFIG } from '../config.js';
 
 import Player from '../entities/Player.js';
 import ObstacleManager from '../managers/ObstacleManager.js';
+import Hud from '../ui/Hud.js';
 
 export default class GameScene extends Phaser.Scene {
   constructor() {
@@ -15,7 +16,7 @@ export default class GameScene extends Phaser.Scene {
 
     this.createBackground();
     this.drawLanes();
-    this.createUI();
+    this.hud = new Hud(this);
 
     // Jugador
     this.player = new Player(this, 1);
@@ -49,7 +50,7 @@ export default class GameScene extends Phaser.Scene {
     const bonusPoints = this.obstacleManager.update();
     this.score += bonusPoints;
 
-    this.updateUI();
+    this.hud.update(this.score, this.obstacleManager.speedLevel);
   }
 
   createBackground() {
@@ -73,25 +74,6 @@ export default class GameScene extends Phaser.Scene {
     });
   }
 
-  createUI() {
-    this.scoreText = this.add
-      .text(20, 16, 'Puntos: 0', {
-        fontSize: '22px',
-        color: '#ffcc00',
-        fontStyle: 'bold',
-        stroke: '#3a2200',
-        strokeThickness: 4
-      })
-      .setDepth(10);
-
-    this.speedText = this.add
-      .text(20, 44, 'Vel: 1', {
-        fontSize: '15px',
-        color: '#cc8800'
-      })
-      .setDepth(10);
-  }
-
   handleInput() {
     if (Phaser.Input.Keyboard.JustDown(this.cursors.up)) {
       this.player.moveUp();
@@ -100,11 +82,6 @@ export default class GameScene extends Phaser.Scene {
     if (Phaser.Input.Keyboard.JustDown(this.cursors.down)) {
       this.player.moveDown();
     }
-  }
-
-  updateUI() {
-    this.scoreText.setText('Puntos: ' + Math.floor(this.score));
-    this.speedText.setText('Vel: ' + this.obstacleManager.speedLevel);
   }
 
   endGame() {
