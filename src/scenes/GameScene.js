@@ -1,8 +1,11 @@
 import Phaser from 'phaser';
-import { GAME_CONFIG } from '../config.js';
 
 import Player from '../entities/Player.js';
+
 import ObstacleManager from '../managers/ObstacleManager.js';
+import BackgroundManager from '../managers/BackgroundManager.js';
+import ScoreManager from '../managers/ScoreManager.js';
+
 import Hud from '../ui/Hud.js';
 
 export default class GameScene extends Phaser.Scene {
@@ -12,26 +15,24 @@ export default class GameScene extends Phaser.Scene {
 
   create() {
     this.gameOver = false;
-    this.score = 0;
 
-    this.createBackground();
-    this.drawLanes();
+    this.backgroundManager = new BackgroundManager(this);
+    this.backgroundManager.create();
+
+    this.scoreManager = new ScoreManager();
+
     this.hud = new Hud(this);
 
-    // Jugador
     this.player = new Player(this, 1);
 
-    // Obstáculos
     this.obstacleManager = new ObstacleManager(this);
 
-    // Colisión
     this.physics.add.overlap(
       this.player.sprite,
       this.obstacleManager.group,
       () => this.endGame()
     );
 
-    // Controles
     this.cursors = this.input.keyboard.createCursorKeys();
   }
 
@@ -40,38 +41,17 @@ export default class GameScene extends Phaser.Scene {
 
     this.handleInput();
 
-    // Puntaje por tiempo
-    this.score += delta * 0.01;
+    this.scoreManager.addTime(delta);
 
-    // Actualizar jugador
     this.player.update(delta);
 
-    // Actualizar obstáculos y sumar bonus por esquivar
     const bonusPoints = this.obstacleManager.update();
-    this.score += bonusPoints;
+    this.scoreManager.addBonus(bonusPoints);
 
-    this.hud.update(this.score, this.obstacleManager.speedLevel);
-  }
-
-  createBackground() {
-    const g = this.add.graphics();
-    const laneH = GAME_CONFIG.height / 3;
-
-    [0x3a2200, 0x2d1b00, 0x3a2200].forEach((color, index) => {
-      g.fillStyle(color, 1);
-      g.fillRect(0, index * laneH, GAME_CONFIG.width, laneH);
-    });
-  }
-
-  drawLanes() {
-    const colors = [0xffcc00, 0xcc8800, 0xffcc00];
-
-    GAME_CONFIG.lanes.forEach((y, index) => {
-      this.add
-        .line(0, 0, 0, y, GAME_CONFIG.width, y, colors[index], 0.2)
-        .setOrigin(0, 0)
-        .setDepth(1);
-    });
+    this.hud.update(
+      this.scoreManager.score,
+      this.obstacleManager.speedLevel
+    );
   }
 
   handleInput() {
@@ -88,15 +68,16 @@ export default class GameScene extends Phaser.Scene {
     if (this.gameOver) return;
 
     this.gameOver = true;
+
     this.player.die();
     this.obstacleManager.stopAll();
 
     const flash = this.add
       .rectangle(
-        GAME_CONFIG.width / 2,
-        GAME_CONFIG.height / 2,
-        GAME_CONFIG.width,
-        GAME_CONFIG.height,
+        this.scale.width / 2,
+        this.scale.height / 2,
+        this.scale.width,
+        this.scale.height,
         0xff0000,
         0
       )
@@ -110,7 +91,7 @@ export default class GameScene extends Phaser.Scene {
       repeat: 2,
       onComplete: () => {
         this.scene.start('GameOverScene', {
-          score: Math.floor(this.score)
+          score: this.scoreManager.getFinalScore()
         });
       }
     });
