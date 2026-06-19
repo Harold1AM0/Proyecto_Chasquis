@@ -9,6 +9,7 @@ import InputManager from '../managers/InputManager.js';
 import VoiceCommandManager from '../managers/VoiceCommandManager.js';
 
 import Hud from '../ui/Hud.js';
+import VoiceDebugPanel from '../ui/VoiceDebugPanel.js';
 
 export default class GameScene extends Phaser.Scene {
   constructor() {
@@ -35,16 +36,53 @@ export default class GameScene extends Phaser.Scene {
       onToggleVoice: () => this.voiceCommandManager.toggle()
     });
 
+    const VOICE_DEBUG = true;  //Mostrar panel de debug de voz (comandos, transcripciones, etc)
+
+    this.voiceDebugPanel = VOICE_DEBUG
+      ? new VoiceDebugPanel(this)
+      : null;
+
+    const updateVoiceDebug = (data) => {
+      if (!VOICE_DEBUG) return;
+      this.voiceDebugPanel?.update(data);
+    };
+
     this.voiceCommandManager = new VoiceCommandManager({
-      onCommand: (command) => {
+      debug: VOICE_DEBUG,
+
+      processInterimCommands: true,
+
+      onCommand: (command, meta = {}) => {
         this.inputManager.handleVoiceCommand(command);
+
+        updateVoiceDebug({
+          lastCommand: command === 'up' ? 'arriba' : 'abajo',
+          latency:
+            typeof meta.latencyMs === 'number'
+              ? `${meta.latencyMs} ms`
+              : '-'
+        });
       },
+
       onStatusChange: (status) => {
         this.hud.updateVoiceStatus(status);
+
+        updateVoiceDebug({
+          status
+        });
       },
+
       onError: (error) => {
         console.warn('Error de voz:', error);
-      }
+
+        updateVoiceDebug({
+          status: 'error'
+        });
+      },
+
+      onDebug: VOICE_DEBUG
+        ? (data) => updateVoiceDebug(data)
+        : null
     });
 
     this.physics.add.overlap(
@@ -52,6 +90,14 @@ export default class GameScene extends Phaser.Scene {
       this.obstacleManager.group,
       () => this.endGame()
     );
+
+    this.events.once(Phaser.Scenes.Events.SHUTDOWN, () => {
+      this.voiceCommandManager?.stop();
+      this.voiceDebugPanel?.destroy();
+
+      this.voiceCommandManager = null;
+      this.voiceDebugPanel = null;
+    });
   }
 
   update(time, delta) {
