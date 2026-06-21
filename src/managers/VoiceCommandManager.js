@@ -108,10 +108,21 @@ export default class VoiceCommandManager {
 
     this.recognition.onerror = (event) => {
       this.debugLog('onerror', event.error);
+
+      const fatalErrors = [
+        'not-allowed',
+        'service-not-allowed',
+        'audio-capture'
+      ];
+
+      if (fatalErrors.includes(event.error)) {
+        this.shouldListen = false;
+      }
+
       this.emitStatus('error');
       this.emitError(event.error);
     };
-
+    
     this.recognition.onresult = (event) => {
       this.handleResult(event);
     };
