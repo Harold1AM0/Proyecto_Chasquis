@@ -128,10 +128,15 @@ export default class GameScene extends Phaser.Scene {
 
     this.hud.update(
       this.scoreManager.score,
-      this.obstacleManager.speedLevel
+      this.obstacleManager.speedLevel,
+      {
+        levelName: this.levelManager.getLevelName(),
+        levelNumber: this.levelManager.getLevelNumber(),
+        totalLevels: this.levelManager.getTotalLevels(),
+        progress: this.levelManager.getProgress(),
+        progressPercent: this.levelManager.getProgressPercent()
+      }
     );
-
-    // this.updateLevelDebug();
 
     if (this.levelManager.isCompleted()) {
       this.completeLevel();
@@ -179,9 +184,8 @@ export default class GameScene extends Phaser.Scene {
             previousScore: currentTotalScore
           });
         } else {
-          this.scene.start('GameOverScene', {
-            score: currentTotalScore,
-            victory: true
+          this.scene.start('WinScene', {
+            score: currentTotalScore
           });
         }
       }
@@ -218,8 +222,7 @@ export default class GameScene extends Phaser.Scene {
       repeat: 2,
       onComplete: () => {
         this.scene.start('GameOverScene', {
-          score: this.previousScore + this.scoreManager.getFinalScore(),
-          victory: false
+          score: this.previousScore + this.scoreManager.getFinalScore()
         });
       }
     });

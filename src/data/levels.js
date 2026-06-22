@@ -1,4 +1,4 @@
-const durationPerLevel = 3000;
+const durationPerLevel = 20000;
 const LEVELS = [
   {
     id: 'valle',

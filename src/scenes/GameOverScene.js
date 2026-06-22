@@ -14,13 +14,8 @@ export default class GameOverScene extends Phaser.Scene {
     const W = GAME_CONFIG.width;
     const H = GAME_CONFIG.height;
 
-    // ═══════════════════════════════════════════
-    //  FONDO — oscuro con viñeta roja
-    // ═══════════════════════════════════════════
-    // Fondo base negro semitransparente (sobre GameScene pausada)
     this.add.rectangle(W / 2, H / 2, W, H, 0x000000, 0.82);
 
-    // Viñeta roja en los bordes (efecto de peligro)
     const vignette = this.add.graphics();
     for (let i = 0; i < 6; i++) {
       const alpha = 0.06 - i * 0.008;
@@ -228,11 +223,11 @@ export default class GameOverScene extends Phaser.Scene {
     const keys = this.input.keyboard.addKeys({
       space: Phaser.Input.Keyboard.KeyCodes.SPACE,
       enter: Phaser.Input.Keyboard.KeyCodes.ENTER,
-      m:     Phaser.Input.Keyboard.KeyCodes.M
+      m: Phaser.Input.Keyboard.KeyCodes.M
     });
     keys.space.once('down', () => this.scene.start('GameScene'));
     keys.enter.once('down', () => this.scene.start('GameScene'));
-    keys.m.once('down',     () => this.scene.start('MenuScene'));
+    keys.m.once('down', () => this.scene.start('MenuScene'));
     this.input.once('pointerdown', () => this.scene.start('GameScene'));
   }
 
