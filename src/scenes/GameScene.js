@@ -7,6 +7,7 @@ import BackgroundManager from '../managers/BackgroundManager.js';
 import ScoreManager from '../managers/ScoreManager.js';
 import InputManager from '../managers/InputManager.js';
 import VoiceCommandManager from '../managers/VoiceCommandManager.js';
+import LevelManager from '../managers/LevelManager.js';
 
 import Hud from '../ui/Hud.js';
 import VoiceDebugPanel from '../ui/VoiceDebugPanel.js';
@@ -16,8 +17,19 @@ export default class GameScene extends Phaser.Scene {
     super('GameScene');
   }
 
+  init(data) {
+    this.levelIndex = data.levelIndex ?? 0;
+    this.previousScore = data.previousScore ?? 0;
+  }
+
   create() {
     this.gameOver = false;
+    this.levelCompleted = false;
+
+    this.levelManager = new LevelManager(this.levelIndex);
+    this.currentLevel = this.levelManager.getCurrentLevel();
+
+    console.log('Nivel iniciado:', this.currentLevel);
 
     this.backgroundManager = new BackgroundManager(this);
     this.backgroundManager.create();
@@ -101,9 +113,11 @@ export default class GameScene extends Phaser.Scene {
   }
 
   update(time, delta) {
-    if (this.gameOver) return;
+    if (this.gameOver || this.levelCompleted) return;
 
     this.inputManager.update();
+
+    this.levelManager.update(delta);
 
     this.scoreManager.addTime(delta);
 
@@ -116,6 +130,62 @@ export default class GameScene extends Phaser.Scene {
       this.scoreManager.score,
       this.obstacleManager.speedLevel
     );
+
+    // this.updateLevelDebug();
+
+    if (this.levelManager.isCompleted()) {
+      this.completeLevel();
+    }
+  }
+
+  completeLevel() {
+    if (this.levelCompleted || this.gameOver) return;
+
+    this.levelCompleted = true;
+
+    this.inputManager.disable();
+    this.voiceCommandManager.stop();
+    this.obstacleManager.stopAll();
+
+    const currentTotalScore = this.previousScore + this.scoreManager.getFinalScore();
+
+    const levelCompleteText = this.add
+      .text(
+        this.scale.width / 2,
+        this.scale.height / 2,
+        '¡Nivel completado!',
+        {
+          fontSize: '40px',
+          color: '#ffffff',
+          backgroundColor: '#000000',
+          padding: {
+            x: 16,
+            y: 10
+          }
+        }
+      )
+      .setOrigin(0.5)
+      .setDepth(40);
+
+    this.tweens.add({
+      targets: levelCompleteText,
+      alpha: 0,
+      duration: 700,
+      delay: 700,
+      onComplete: () => {
+        if (this.levelManager.hasNextLevel()) {
+          this.scene.start('GameScene', {
+            levelIndex: this.levelManager.getNextLevelIndex(),
+            previousScore: currentTotalScore
+          });
+        } else {
+          this.scene.start('GameOverScene', {
+            score: currentTotalScore,
+            victory: true
+          });
+        }
+      }
+    });
   }
 
   endGame() {
@@ -148,7 +218,8 @@ export default class GameScene extends Phaser.Scene {
       repeat: 2,
       onComplete: () => {
         this.scene.start('GameOverScene', {
-          score: this.scoreManager.getFinalScore()
+          score: this.previousScore + this.scoreManager.getFinalScore(),
+          victory: false
         });
       }
     });
