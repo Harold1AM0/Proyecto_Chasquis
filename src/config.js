@@ -1,26 +1,33 @@
+const WIDTH = 1200;
+const HEIGHT = 675;
+
+// Por tanto, el camino ocupa el 65% inferior.
+const ROAD_TOP = Math.round(HEIGHT * 0.45);
+const ROAD_BOTTOM = Math.round(HEIGHT * 0.94);
+const ROAD_HEIGHT = ROAD_BOTTOM - ROAD_TOP;
+
+// Carriles dentro del camino
+const LANE_1 = Math.round(ROAD_TOP + ROAD_HEIGHT * 0.25);
+const LANE_2 = Math.round(ROAD_TOP + ROAD_HEIGHT * 0.55);
+const LANE_3 = Math.round(ROAD_TOP + ROAD_HEIGHT * 0.85);
+
 export const GAME_CONFIG = {
-  width: 900,
-  height: 500,
+  width: WIDTH,
+  height: HEIGHT,
   backgroundColor: '#2d1b00',
 
   layout: {
-    backgroundRatio: 0.35,
-    roadRatio: 0.65,
-
-    // El fondo ocupa de 0 a 175 px aprox.
-    roadTop: 175,
-
-    // El camino llega casi hasta abajo, dejando un pequeño margen
-    roadBottom: 470,
-
-    // Altura visual del camino
-    roadHeight: 295
+    backgroundRatio: 0.45,
+    roadRatio: 0.55,
+    roadTop: ROAD_TOP,
+    roadBottom: ROAD_BOTTOM,
+    roadHeight: ROAD_HEIGHT
   },
 
-  lanes: [245, 335, 425],
+  lanes: [LANE_1, LANE_2, LANE_3],
 
   player: {
-    x: 150,
+    x: Math.round(WIDTH * 0.16),
     width: 40,
     height: 64,
     texture: 'chasqui'

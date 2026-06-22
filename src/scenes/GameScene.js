@@ -119,6 +119,8 @@ export default class GameScene extends Phaser.Scene {
 
     this.levelManager.update(delta);
 
+    this.backgroundManager.update(delta);
+
     this.scoreManager.addTime(delta);
 
     this.player.update(delta);

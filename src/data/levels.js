@@ -14,6 +14,13 @@ const LEVELS = [
       spawnMultiplier: 1
     },
 
+    assets: {
+      background: 'bg_valle',
+      road: 'road_valle',
+      backgroundScrollSpeed: 0.6,
+      roadScrollSpeed: 5
+    },
+
     theme: {
       skyColor: 0x79cfff,
       horizonColor: 0x8fcf72,
@@ -39,6 +46,13 @@ const LEVELS = [
       spawnMultiplier: 0.9
     },
 
+    assets: {
+      background: 'bg_jungla',
+      road: 'road_jungla',
+      backgroundScrollSpeed: 0.7,
+      roadScrollSpeed: 6
+    },
+
     theme: {
       skyColor: 0x071421,
       horizonColor: 0x12351f,
@@ -62,6 +76,13 @@ const LEVELS = [
     difficulty: {
       speedMultiplier: 1.5,
       spawnMultiplier: 0.8
+    },
+
+    assets: {
+      background: 'bg_costa',
+      road: 'road_costa',
+      backgroundScrollSpeed: 0.8,
+      roadScrollSpeed: 7
     },
 
     theme: {

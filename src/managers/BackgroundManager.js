@@ -13,20 +13,69 @@ export default class BackgroundManager {
     this.scene = scene;
     this.levelConfig = levelConfig;
     this.theme = levelConfig?.theme || DEFAULT_THEME;
+    this.assets = levelConfig?.assets || {};
+
     this.elements = [];
+
+    this.backgroundImage = null;
+    this.backgroundScrollSpeed = this.assets.backgroundScrollSpeed ?? 0.2;
+
+    this.roadImage = null;
+    this.roadScrollSpeed = this.assets.roadScrollSpeed ?? 2.5;
+
+    // Para pruebas. Cuando tu PNG de camino ya tenga carriles dibujados,
+    // pon showDebugLanes: false en levels.js.
+    this.showDebugLanes = this.assets.showDebugLanes ?? true;
   }
 
   create() {
     this.createBackground();
     this.createRoad();
-    this.drawLanes();
+
+    if (this.showDebugLanes) {
+      this.drawLanes();
+    }
   }
 
   createBackground() {
     const W = GAME_CONFIG.width;
     const roadTop = GAME_CONFIG.layout.roadTop;
 
-    // Cielo / fondo superior
+    const backgroundKey = this.assets.background;
+
+    if (backgroundKey && this.scene.textures.exists(backgroundKey)) {
+      const texture = this.scene.textures.get(backgroundKey);
+      const source = texture.getSourceImage();
+
+      const imageWidth = source.width;
+      const imageHeight = source.height;
+
+      // La imagen ocupa todo el ancho del canvas.
+      const scale = W / imageWidth;
+
+      // Altura proporcional. No se deforma.
+      const displayHeight = imageHeight * scale;
+
+      this.backgroundImage = this.scene.add
+        .tileSprite(
+          0,
+          0,
+          W,
+          displayHeight,
+          backgroundKey
+        )
+        .setOrigin(0, 0)
+        .setDepth(-25);
+
+      this.backgroundImage.tileScaleX = scale;
+      this.backgroundImage.tileScaleY = scale;
+
+      this.elements.push(this.backgroundImage);
+
+      return;
+    }
+
+    // Respaldo si no hay imagen de fondo.
     const sky = this.scene.add
       .rectangle(
         W / 2,
@@ -40,7 +89,6 @@ export default class BackgroundManager {
 
     this.elements.push(sky);
 
-    // Franja de horizonte provisional
     const horizon = this.scene.add
       .rectangle(
         W / 2,
@@ -53,26 +101,6 @@ export default class BackgroundManager {
       .setDepth(-18);
 
     this.elements.push(horizon);
-
-    // Montañas / silueta temporal
-    const mountains = this.scene.add.graphics();
-    mountains.fillStyle(this.theme.roadDarkColor, 0.35);
-
-    mountains.beginPath();
-    mountains.moveTo(0, roadTop - 20);
-    mountains.lineTo(120, roadTop - 95);
-    mountains.lineTo(250, roadTop - 35);
-    mountains.lineTo(390, roadTop - 110);
-    mountains.lineTo(560, roadTop - 40);
-    mountains.lineTo(720, roadTop - 100);
-    mountains.lineTo(W, roadTop - 25);
-    mountains.lineTo(W, roadTop);
-    mountains.lineTo(0, roadTop);
-    mountains.closePath();
-    mountains.fillPath();
-
-    mountains.setDepth(-17);
-    this.elements.push(mountains);
   }
 
   createRoad() {
@@ -81,33 +109,40 @@ export default class BackgroundManager {
     const roadTop = GAME_CONFIG.layout.roadTop;
     const roadHeight = H - roadTop;
 
-    // Camino principal
-    const road = this.scene.add
-      .rectangle(
-        W / 2,
-        roadTop + roadHeight / 2,
-        W,
-        roadHeight,
-        this.theme.roadColor,
-        1
-      )
-      .setDepth(-15);
+    const roadKey = this.assets.road;
 
-    this.elements.push(road);
+    if (roadKey && this.scene.textures.exists(roadKey)) {
+      const texture = this.scene.textures.get(roadKey);
+      const source = texture.getSourceImage();
 
-    // Sombra inferior del camino
-    const roadShadow = this.scene.add
-      .rectangle(
-        W / 2,
-        H - 38,
-        W,
-        76,
-        this.theme.roadDarkColor,
-        0.45
-      )
-      .setDepth(-14);
+      const imageHeight = source.height;
 
-    this.elements.push(roadShadow);
+      // El camino se ajusta a la altura del área inferior.
+      const scale = roadHeight / imageHeight;
+
+      this.roadImage = this.scene.add
+        .tileSprite(
+          0,
+          roadTop,
+          W,
+          roadHeight,
+          roadKey
+        )
+        .setOrigin(0, 0)
+        .setDepth(-15);
+
+      this.roadImage.tileScaleX = scale;
+      this.roadImage.tileScaleY = scale;
+
+      this.elements.push(this.roadImage);
+
+      return;
+    }
+
+    // Importante:
+    // Ya NO dibujamos rectángulos marrones.
+    // Si no hay PNG de camino, simplemente no se dibuja camino.
+    console.warn('No se encontró imagen de camino:', roadKey);
   }
 
   drawLanes() {
@@ -132,8 +167,25 @@ export default class BackgroundManager {
     });
   }
 
+  update(delta) {
+    const factor = delta / 16.67;
+
+    if (this.backgroundImage) {
+      this.backgroundImage.tilePositionX +=
+        this.backgroundScrollSpeed * factor;
+    }
+
+    if (this.roadImage) {
+      this.roadImage.tilePositionX +=
+        this.roadScrollSpeed * factor;
+    }
+  }
+
   destroy() {
     this.elements.forEach((element) => element.destroy());
     this.elements = [];
+
+    this.backgroundImage = null;
+    this.roadImage = null;
   }
 }
