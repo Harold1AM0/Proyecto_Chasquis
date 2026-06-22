@@ -31,7 +31,7 @@ export default class GameScene extends Phaser.Scene {
 
     console.log('Nivel iniciado:', this.currentLevel);
 
-    this.backgroundManager = new BackgroundManager(this);
+    this.backgroundManager = new BackgroundManager(this, this.currentLevel);
     this.backgroundManager.create();
 
     this.scoreManager = new ScoreManager();
@@ -40,7 +40,7 @@ export default class GameScene extends Phaser.Scene {
 
     this.player = new Player(this, 1);
 
-    this.obstacleManager = new ObstacleManager(this);
+    this.obstacleManager = new ObstacleManager(this, this.currentLevel);
 
     this.inputManager = new InputManager(this, {
       onMoveUp: () => this.player.moveUp(),
@@ -134,7 +134,8 @@ export default class GameScene extends Phaser.Scene {
         levelNumber: this.levelManager.getLevelNumber(),
         totalLevels: this.levelManager.getTotalLevels(),
         progress: this.levelManager.getProgress(),
-        progressPercent: this.levelManager.getProgressPercent()
+        progressPercent: this.levelManager.getProgressPercent(),
+        theme: this.currentLevel.theme
       }
     );
 

@@ -104,6 +104,12 @@ export default class Hud {
 
       const safeProgress = Phaser.Math.Clamp(levelData.progress, 0, 1);
       this.progressBarFill.width = this.progressBarWidth * safeProgress;
+
+      if (levelData.theme) {
+        this.levelText.setColor(levelData.theme.hudTextColor);
+        this.progressText.setColor(levelData.theme.hudTextColor);
+        this.progressBarFill.fillColor = levelData.theme.hudBarColor;
+      }
     }
   }
 

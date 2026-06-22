@@ -3,7 +3,21 @@ export const GAME_CONFIG = {
   height: 500,
   backgroundColor: '#2d1b00',
 
-  lanes: [120, 250, 380],
+  layout: {
+    backgroundRatio: 0.35,
+    roadRatio: 0.65,
+
+    // El fondo ocupa de 0 a 175 px aprox.
+    roadTop: 175,
+
+    // El camino llega casi hasta abajo, dejando un pequeño margen
+    roadBottom: 470,
+
+    // Altura visual del camino
+    roadHeight: 295
+  },
+
+  lanes: [245, 335, 425],
 
   player: {
     x: 150,
