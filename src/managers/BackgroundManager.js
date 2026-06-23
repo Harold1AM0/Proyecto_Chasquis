@@ -106,8 +106,6 @@ export default class BackgroundManager {
   createRoad() {
     const W = GAME_CONFIG.width;
     const H = GAME_CONFIG.height;
-    const roadTop = GAME_CONFIG.layout.roadTop;
-    const roadHeight = H - roadTop;
 
     const roadKey = this.assets.road;
 
@@ -115,17 +113,24 @@ export default class BackgroundManager {
       const texture = this.scene.textures.get(roadKey);
       const source = texture.getSourceImage();
 
+      const imageWidth = source.width;
       const imageHeight = source.height;
 
-      // El camino se ajusta a la altura del área inferior.
-      const scale = roadHeight / imageHeight;
+      // El camino ocupa todo el ancho del canvas.
+      const scale = W / imageWidth;
+
+      // Mantiene proporción.
+      const displayHeight = imageHeight * scale;
+
+      // Pegado abajo.
+      const roadY = H - displayHeight;
 
       this.roadImage = this.scene.add
         .tileSprite(
           0,
-          roadTop,
+          roadY,
           W,
-          roadHeight,
+          displayHeight,
           roadKey
         )
         .setOrigin(0, 0)
@@ -139,9 +144,6 @@ export default class BackgroundManager {
       return;
     }
 
-    // Importante:
-    // Ya NO dibujamos rectángulos marrones.
-    // Si no hay PNG de camino, simplemente no se dibuja camino.
     console.warn('No se encontró imagen de camino:', roadKey);
   }
 
