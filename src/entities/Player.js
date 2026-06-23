@@ -39,12 +39,15 @@ export default class Player {
   }
 
   moveDown() {
-    if (!this.isAlive) return;
+    if (!this.isAlive) return false;
 
     if (this.currentLane < GAME_CONFIG.lanes.length - 1) {
       this.currentLane++;
       this._tweenToLane();
+      return true;
     }
+
+    return false;
   }
 
   _tweenToLane() {

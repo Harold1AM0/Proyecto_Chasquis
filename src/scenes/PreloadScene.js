@@ -91,9 +91,9 @@ export default class PreloadScene extends Phaser.Scene {
 
     // Música
     //this.load.audio('music_menu', 'assets/audio/music/menu_theme.mp3');
-    this.load.audio('music_valle', 'assets/audio/music/level_valle.mp3');
-    this.load.audio('music_jungla', 'assets/audio/music/level_jungla.mp3');
-    this.load.audio('music_costa', 'assets/audio/music/level_costa.mp3');
+    this.load.audio('music_valle', 'assets/audio/music/level_valle.ogg');
+    this.load.audio('music_jungla', 'assets/audio/music/level_jungla.ogg');
+    this.load.audio('music_costa', 'assets/audio/music/level_costa.ogg');
 
     // Efectos
     this.load.audio('sfx_lane_change', 'assets/audio/sfx/lane_change.wav');
