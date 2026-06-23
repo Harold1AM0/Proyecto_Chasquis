@@ -27,12 +27,15 @@ export default class Player {
   }
 
   moveUp() {
-    if (!this.isAlive) return;
+    if (!this.isAlive) return false;
 
     if (this.currentLane > 0) {
       this.currentLane--;
       this._tweenToLane();
+      return true;
     }
+
+    return false;
   }
 
   moveDown() {

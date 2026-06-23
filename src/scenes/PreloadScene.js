@@ -79,12 +79,28 @@ export default class PreloadScene extends Phaser.Scene {
   }
 
   preload() {
+    // Backgrounds
     this.load.image('bg_valle', 'assets/images/backgrounds/bg_valle.png');
     this.load.image('bg_jungla', 'assets/images/backgrounds/bg_jungla.png');
     this.load.image('bg_costa', 'assets/images/backgrounds/bg_costa.png');
+
+    // Roads
     this.load.image('road_valle', 'assets/images/roads/road_valle.png');
     this.load.image('road_jungla', 'assets/images/roads/road_jungla.png');
     this.load.image('road_costa', 'assets/images/roads/road_costa.png');
+
+    // Música
+    //this.load.audio('music_menu', 'assets/audio/music/menu_theme.mp3');
+    this.load.audio('music_valle', 'assets/audio/music/level_valle.mp3');
+    this.load.audio('music_jungla', 'assets/audio/music/level_jungla.mp3');
+    this.load.audio('music_costa', 'assets/audio/music/level_costa.mp3');
+
+    // Efectos
+    this.load.audio('sfx_lane_change', 'assets/audio/sfx/lane_change.wav');
+    this.load.audio('sfx_death', 'assets/audio/sfx/death.wav');
+    this.load.audio('sfx_level_complete', 'assets/audio/sfx/level_complete.wav');
+    //this.load.audio('sfx_victory', 'assets/audio/sfx/victory.wav');
+    //this.load.audio('sfx_button', 'assets/audio/sfx/button.wav');
   }
 
   create() {
