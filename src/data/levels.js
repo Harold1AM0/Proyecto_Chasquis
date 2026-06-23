@@ -139,7 +139,11 @@ const LEVELS = [
       after: [
         {
           imageKey: 'story_final_1',
-          text: 'El mensaje finalmente llega a destino. La misión del chasqui se ha cumplido.'
+          text: 'Llegó tarde. La costa ya había caído.'
+        },
+        {
+          imageKey: 'story_final_1',
+          text: 'Pero el chasqui aún debía correr… ahora por su vida.'
         }
       ]
     },

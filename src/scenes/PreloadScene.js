@@ -79,6 +79,7 @@ export default class PreloadScene extends Phaser.Scene {
   }
 
   preload() {
+    this.load.image('fondoVictoria', 'assets/images/backgrounds/victoria.png');
     this.load.image('fondoMenu', 'assets/images/backgrounds/menu.png');
 
     // Backgrounds
@@ -101,6 +102,7 @@ export default class PreloadScene extends Phaser.Scene {
 
     this.load.image('story_costa_1', 'assets/images/story/story_costa_1.png');
     this.load.image('story_final_1', 'assets/images/story/story_final_1.png');
+    this.load.image('story_final_2', 'assets/images/story/story_final_2.png');
 
     // Música
     this.load.audio('music_menu', 'assets/audio/music/menu_theme.ogg');

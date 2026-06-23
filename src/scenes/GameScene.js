@@ -208,32 +208,76 @@ export default class GameScene extends Phaser.Scene {
       duration: 700,
       delay: 700,
       onComplete: () => {
-        if (this.levelManager.hasNextLevel()) {
+        const isLastLevel = !this.levelManager.hasNextLevel();
+
+        // CASO 1: NIVEL 1 O NIVEL 2
+        if (!isLastLevel) {
           const nextLevelIndex = this.levelManager.getNextLevelIndex();
           const nextLevel = LEVELS[nextLevelIndex];
 
           const currentAfterSlides = this.currentLevel.story?.after ?? [];
           const nextBeforeSlides = nextLevel.story?.before ?? [];
 
-          const slides = [
-            ...currentAfterSlides,
-            ...nextBeforeSlides
-          ];
+          const goToWinScene = () => {
+            this.scene.start('WinScene', {
+              score: currentTotalScore,
+              title: '¡TRAMO COMPLETADO!',
+              subtitle: 'El mensaje sigue su camino por el Qhapaq Ñan.',
+              bodyText: 'El chasqui debe continuar hacia el siguiente territorio.',
+              scoreLabel: 'PUNTUACIÓN ACUMULADA',
+              buttonText: 'CONTINUAR MISIÓN [ENTER]',
 
-          if (slides.length > 0) {
+              // Después del WinScene recién se muestran las imágenes iniciales del siguiente nivel.
+              nextScene: nextBeforeSlides.length > 0 ? 'StoryScene' : 'GameScene',
+
+              nextData: nextBeforeSlides.length > 0
+                ? {
+                  slides: nextBeforeSlides,
+                  nextScene: 'GameScene',
+                  nextData: {
+                    levelIndex: nextLevelIndex,
+                    previousScore: currentTotalScore
+                  }
+                }
+                : {
+                  levelIndex: nextLevelIndex,
+                  previousScore: currentTotalScore
+                }
+            });
+          };
+
+          // Primero se muestran SOLO las imágenes finales del nivel actual.
+          if (currentAfterSlides.length > 0) {
             this.scene.start('StoryScene', {
-              slides,
-              nextScene: 'GameScene',
+              slides: currentAfterSlides,
+              nextScene: 'WinScene',
               nextData: {
-                levelIndex: nextLevelIndex,
-                previousScore: currentTotalScore
+                score: currentTotalScore,
+                title: '¡TRAMO COMPLETADO!',
+                subtitle: 'El mensaje sigue su camino por el Qhapaq Ñan.',
+                bodyText: 'El chasqui debe continuar hacia el siguiente territorio.',
+                scoreLabel: 'PUNTUACIÓN ACUMULADA',
+                buttonText: 'CONTINUAR MISIÓN [ENTER]',
+
+                nextScene: nextBeforeSlides.length > 0 ? 'StoryScene' : 'GameScene',
+
+                nextData: nextBeforeSlides.length > 0
+                  ? {
+                    slides: nextBeforeSlides,
+                    nextScene: 'GameScene',
+                    nextData: {
+                      levelIndex: nextLevelIndex,
+                      previousScore: currentTotalScore
+                    }
+                  }
+                  : {
+                    levelIndex: nextLevelIndex,
+                    previousScore: currentTotalScore
+                  }
               }
             });
           } else {
-            this.scene.start('GameScene', {
-              levelIndex: nextLevelIndex,
-              previousScore: currentTotalScore
-            });
+            goToWinScene();
           }
 
           return;
@@ -244,15 +288,11 @@ export default class GameScene extends Phaser.Scene {
         if (endingSlides.length > 0) {
           this.scene.start('StoryScene', {
             slides: endingSlides,
-            nextScene: 'WinScene',
-            nextData: {
-              score: currentTotalScore
-            }
+            nextScene: 'EndScene',
+            nextData: {}
           });
         } else {
-          this.scene.start('WinScene', {
-            score: currentTotalScore
-          });
+          this.scene.start('EndScene');
         }
       }
     });
