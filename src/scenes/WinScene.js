@@ -10,95 +10,102 @@ export default class WinScene extends Phaser.Scene {
     this.finalScore = data.score || 0;
   }
 
-  create() {
-    const W = GAME_CONFIG.width;
-    const H = GAME_CONFIG.height;
+  preload() {
+    this.load.image('fondoVictoria', '../../assets/images/backgrounds/victoria.png');
+  }
 
-    this.add.rectangle(W / 2, H / 2, W, H, 0x050f08, 1);
+  create() {
+    const { width: W, height: H } = GAME_CONFIG;
+
+    this.add.image(W / 2, H / 2, 'fondoVictoria').setOrigin(0.5).setDisplaySize(W, H);
+
+    const cx = W / 2;
+    const cy = H / 2;
 
     const panel = this.add.graphics();
+    panel.fillStyle(0x0a2210, 0.45);
+    panel.fillRoundedRect(cx - 300, cy - 180, 600, 370, 20);
+    panel.lineStyle(3, 0xffdd44, 0.7);
+    panel.strokeRoundedRect(cx - 300, cy - 180, 600, 370, 20);
 
-    panel.fillStyle(0x102510, 0.95);
-    panel.fillRoundedRect(W / 2 - 310, H / 2 - 185, 620, 370, 16);
+    const titleStyle = { fontFamily: 'Impact, sans-serif', color: '#ffcc33', align: 'center' };
+    const textStyle = { fontFamily: 'Trebuchet MS, sans-serif', color: '#ffffff', align: 'center' };
 
-    panel.lineStyle(3, 0xffcc33, 0.95);
-    panel.strokeRoundedRect(W / 2 - 310, H / 2 - 185, 620, 370, 16);
-
-    panel.lineStyle(1, 0xffffff, 0.25);
-    panel.strokeRoundedRect(W / 2 - 295, H / 2 - 170, 590, 340, 12);
-
-    this.add.text(W / 2, H / 2 - 125, '¡MISIÓN CUMPLIDA!', {
-      fontSize: '56px',
-      color: '#ffcc33',
-      fontStyle: 'bold',
-      fontFamily: 'Georgia, serif',
-      stroke: '#3a2500',
-      strokeThickness: 8
+    this.add.text(cx, cy - 110, '¡MISIÓN CUMPLIDA!', { 
+      ...titleStyle, 
+      fontSize: '65px', 
+      stroke: '#113311', 
+      strokeThickness: 8 
     }).setOrigin(0.5);
 
-    this.add.text(W / 2, H / 2 - 62, 'El mensaje llegó a destino', {
-      fontSize: '24px',
-      color: '#ffffff',
-      fontFamily: 'Georgia, serif',
-      fontStyle: 'italic'
+    this.add.text(cx, cy - 35, 'El mensaje ha llegado a su destino', { 
+      ...textStyle, 
+      fontSize: '26px', 
+      fontStyle: 'italic', 
+      stroke: '#000000', 
+      strokeThickness: 5 
     }).setOrigin(0.5);
 
-    this.add.text(W / 2, H / 2 - 20, 'Has completado los 3 tramos del Qhapaq Ñan', {
-      fontSize: '18px',
-      color: '#d8c28a',
-      fontFamily: 'Georgia, serif'
+    this.add.text(cx, cy + 10, 'Has completado los 3 tramos del Qhapaq Ñan', { 
+      ...textStyle, 
+      fontSize: '18px', 
+      color: '#ddffcc', 
+      stroke: '#000000', 
+      strokeThickness: 4 
     }).setOrigin(0.5);
 
     const scoreBox = this.add.graphics();
+    scoreBox.fillStyle(0x000000, 0.55);
+    scoreBox.fillRoundedRect(cx - 150, cy + 45, 300, 85, 15);
+    scoreBox.lineStyle(2, 0xffcc33, 0.8);
+    scoreBox.strokeRoundedRect(cx - 150, cy + 45, 300, 85, 15);
 
-    scoreBox.fillStyle(0x061506, 0.9);
-    scoreBox.fillRoundedRect(W / 2 - 140, H / 2 + 15, 280, 78, 10);
-
-    scoreBox.lineStyle(2, 0xffcc33, 0.75);
-    scoreBox.strokeRoundedRect(W / 2 - 140, H / 2 + 15, 280, 78, 10);
-
-    this.add.text(W / 2, H / 2 + 38, 'PUNTUACIÓN FINAL', {
-      fontSize: '14px',
-      color: '#ffcc33',
-      fontStyle: 'bold',
-      fontFamily: 'Georgia, serif'
+    this.add.text(cx, cy + 65, 'PUNTUACIÓN FINAL', { 
+      ...textStyle, 
+      fontSize: '16px', 
+      color: '#ffcc33', 
+      fontStyle: 'bold', 
+      stroke: '#000000', 
+      strokeThickness: 3 
     }).setOrigin(0.5);
 
-    const scoreText = this.add.text(W / 2, H / 2 + 68, '0', {
-      fontSize: '36px',
-      color: '#ffffff',
-      fontStyle: 'bold',
-      fontFamily: 'Georgia, serif',
-      stroke: '#000000',
-      strokeThickness: 5
+    const scoreText = this.add.text(cx, cy + 100, '0', { 
+      ...titleStyle, 
+      fontSize: '42px', 
+      color: '#ffffff', 
+      stroke: '#000000', 
+      strokeThickness: 6 
     }).setOrigin(0.5);
 
     if (this.finalScore > 0) {
       const counter = { value: 0 };
-
       this.tweens.add({
         targets: counter,
         value: this.finalScore,
-        duration: 900,
+        duration: 1200,
         ease: 'Cubic.easeOut',
-        onUpdate: () => {
-          scoreText.setText(Math.floor(counter.value).toString());
-        }
+        onUpdate: () => scoreText.setText(Math.floor(counter.value).toString())
       });
     }
 
-    this.add.text(W / 2, H / 2 + 130, '▶ Jugar otra vez  [ESPACIO]', {
-      fontSize: '18px',
-      color: '#fff5d0',
-      fontStyle: 'bold',
-      fontFamily: 'Georgia, serif'
+    const btnText = this.add.text(cx, cy + 160, '▶ JUGAR OTRA VEZ [ESPACIO]', { 
+      ...titleStyle, 
+      fontSize: '24px', 
+      color: '#fff5d0', 
+      stroke: '#000000', 
+      strokeThickness: 5,
+      letterSpacing: 2
     }).setOrigin(0.5);
 
-    this.add.text(W / 2, H / 2 + 160, '← Volver al menú  [M]', {
-      fontSize: '15px',
-      color: '#c9b67c',
-      fontFamily: 'Georgia, serif'
+    this.add.text(cx, cy + 200, '← Volver al menú [M]', { 
+      ...textStyle, 
+      fontSize: '16px', 
+      color: '#c9b67c', 
+      stroke: '#000000', 
+      strokeThickness: 4 
     }).setOrigin(0.5);
+
+    this.tweens.add({ targets: btnText, alpha: 0.5, duration: 800, yoyo: true, repeat: -1 });
 
     const keys = this.input.keyboard.addKeys({
       space: Phaser.Input.Keyboard.KeyCodes.SPACE,
@@ -106,10 +113,10 @@ export default class WinScene extends Phaser.Scene {
       m: Phaser.Input.Keyboard.KeyCodes.M
     });
 
-    keys.space.once('down', () => this.scene.start('GameScene'));
-    keys.enter.once('down', () => this.scene.start('GameScene'));
+    const restart = () => this.scene.start('GameScene');
+    keys.space.once('down', restart);
+    keys.enter.once('down', restart);
     keys.m.once('down', () => this.scene.start('MenuScene'));
-
-    this.input.once('pointerdown', () => this.scene.start('GameScene'));
+    this.input.once('pointerdown', restart);
   }
 }
