@@ -17,8 +17,10 @@ const LEVELS = [
     assets: {
       background: 'bg_valle',
       road: 'road_valle',
+      music: 'music_valle',
       backgroundScrollSpeed: 0.6,
-      roadScrollSpeed: 5
+      roadScrollSpeed: 5,
+      showDebugLanes: false
     },
 
     theme: {
@@ -49,8 +51,10 @@ const LEVELS = [
     assets: {
       background: 'bg_jungla',
       road: 'road_jungla',
+      music: 'music_jungla',
       backgroundScrollSpeed: 0.7,
-      roadScrollSpeed: 6
+      roadScrollSpeed: 6,
+      showDebugLanes: false
     },
 
     theme: {
@@ -81,8 +85,10 @@ const LEVELS = [
     assets: {
       background: 'bg_costa',
       road: 'road_costa',
+      music: 'music_costa',
       backgroundScrollSpeed: 0.8,
-      roadScrollSpeed: 7
+      roadScrollSpeed: 7,
+      showDebugLanes: false
     },
 
     theme: {

@@ -8,6 +8,7 @@ import ScoreManager from '../managers/ScoreManager.js';
 import InputManager from '../managers/InputManager.js';
 import VoiceCommandManager from '../managers/VoiceCommandManager.js';
 import LevelManager from '../managers/LevelManager.js';
+import AudioManager from '../managers/AudioManager.js';
 
 import Hud from '../ui/Hud.js';
 import VoiceDebugPanel from '../ui/VoiceDebugPanel.js';
@@ -29,6 +30,9 @@ export default class GameScene extends Phaser.Scene {
     this.levelManager = new LevelManager(this.levelIndex);
     this.currentLevel = this.levelManager.getCurrentLevel();
 
+    this.audioManager = new AudioManager(this);
+    this.audioManager.playMusic(this.currentLevel.assets?.music);
+
     console.log('Nivel iniciado:', this.currentLevel);
 
     this.backgroundManager = new BackgroundManager(this, this.currentLevel);
@@ -43,8 +47,22 @@ export default class GameScene extends Phaser.Scene {
     this.obstacleManager = new ObstacleManager(this, this.currentLevel);
 
     this.inputManager = new InputManager(this, {
-      onMoveUp: () => this.player.moveUp(),
-      onMoveDown: () => this.player.moveDown(),
+      onMoveUp: () => {
+        const moved = this.player.moveUp();
+
+        if (moved) {
+          this.audioManager.playSfx('sfx_lane_change');
+        }
+      },
+
+      onMoveDown: () => {
+        const moved = this.player.moveDown();
+
+        if (moved) {
+          this.audioManager.playSfx('sfx_lane_change');
+        }
+      },
+
       onToggleVoice: () => this.voiceCommandManager.toggle()
     });
 
@@ -107,8 +125,11 @@ export default class GameScene extends Phaser.Scene {
       this.voiceCommandManager?.stop();
       this.voiceDebugPanel?.destroy();
 
+      this.audioManager?.destroy();
+
       this.voiceCommandManager = null;
       this.voiceDebugPanel = null;
+      this.audioManager = null;
     });
   }
 
@@ -150,6 +171,9 @@ export default class GameScene extends Phaser.Scene {
     if (this.levelCompleted || this.gameOver) return;
 
     this.levelCompleted = true;
+
+    this.audioManager.playSfx('sfx_level_complete');
+    this.audioManager.fadeOutMusic(700);
 
     this.inputManager.disable();
     this.voiceCommandManager.stop();
@@ -199,6 +223,9 @@ export default class GameScene extends Phaser.Scene {
     if (this.gameOver) return;
 
     this.gameOver = true;
+
+    this.audioManager.playSfx('sfx_death');
+    this.audioManager.fadeOutMusic(400);
 
     this.inputManager.disable();
     this.voiceCommandManager.stop();
