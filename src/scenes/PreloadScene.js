@@ -79,6 +79,8 @@ export default class PreloadScene extends Phaser.Scene {
   }
 
   preload() {
+    this.load.image('fondoMenu', 'assets/images/backgrounds/menu.png');
+
     // Backgrounds
     this.load.image('bg_valle', 'assets/images/backgrounds/bg_valle.png');
     this.load.image('bg_jungla', 'assets/images/backgrounds/bg_jungla.png');
@@ -89,8 +91,19 @@ export default class PreloadScene extends Phaser.Scene {
     this.load.image('road_jungla', 'assets/images/roads/road_jungla.png');
     this.load.image('road_costa', 'assets/images/roads/road_costa.png');
 
+    // Historia images
+    this.load.image('story_valle_1', 'assets/images/story/story_valle_1.png');
+    this.load.image('story_valle_2', 'assets/images/story/story_valle_2.png');
+    this.load.image('story_valle_4', 'assets/images/story/story_valle_4.png');
+
+    this.load.image('story_jungla_1', 'assets/images/story/story_jungla_1.png');
+    this.load.image('story_jungla_2', 'assets/images/story/story_jungla_2.png');
+
+    this.load.image('story_costa_1', 'assets/images/story/story_costa_1.png');
+    this.load.image('story_final_1', 'assets/images/story/story_final_1.png');
+
     // Música
-    //this.load.audio('music_menu', 'assets/audio/music/menu_theme.mp3');
+    this.load.audio('music_menu', 'assets/audio/music/menu_theme.ogg');
     this.load.audio('music_valle', 'assets/audio/music/level_valle.ogg');
     this.load.audio('music_jungla', 'assets/audio/music/level_jungla.ogg');
     this.load.audio('music_costa', 'assets/audio/music/level_costa.ogg');
@@ -99,8 +112,7 @@ export default class PreloadScene extends Phaser.Scene {
     this.load.audio('sfx_lane_change', 'assets/audio/sfx/lane_change.wav');
     this.load.audio('sfx_death', 'assets/audio/sfx/death.wav');
     this.load.audio('sfx_level_complete', 'assets/audio/sfx/level_complete.wav');
-    //this.load.audio('sfx_victory', 'assets/audio/sfx/victory.wav');
-    //this.load.audio('sfx_button', 'assets/audio/sfx/button.wav');
+    this.load.audio('sfx_button', 'assets/audio/sfx/button.wav');
   }
 
   create() {

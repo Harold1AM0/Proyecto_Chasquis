@@ -1,4 +1,4 @@
-const durationPerLevel = 20000;
+const durationPerLevel = 2000;
 
 const LEVELS = [
   {
@@ -21,6 +21,25 @@ const LEVELS = [
       backgroundScrollSpeed: 0.6,
       roadScrollSpeed: 5,
       showDebugLanes: false
+    },
+
+    story: {
+      before: [
+        {
+          imageKey: 'story_valle_4',
+          text: 'El joven chasqui despierta en el valle de Cusco. Su misión es entregar mensajes a la capital del imperio.'
+        },
+        {
+          imageKey: 'story_valle_1',
+          text: 'El joven chasqui recibe un mensaje urgente. Debe correr por el Qhapaq Ñan y advertir del peligro.'
+        }
+      ],
+      after: [
+        {
+          imageKey: 'story_valle_2',
+          text: 'Tras cruzar el valle, el mensaje continúa su ruta hacia regiones más peligrosas.'
+        }
+      ]
     },
 
     theme: {
@@ -57,6 +76,21 @@ const LEVELS = [
       showDebugLanes: false
     },
 
+    story: {
+      before: [
+        {
+          imageKey: 'story_jungla_1',
+          text: 'La noche cae. La ruta se vuelve más peligrosa y cada paso exige mayor rapidez.'
+        }
+      ],
+      after: [
+        {
+          imageKey: 'story_jungla_2',
+          text: 'El chasqui logra salir de la espesura. Solo queda el tramo final.'
+        }
+      ]
+    },
+
     theme: {
       skyColor: 0x071421,
       horizonColor: 0x12351f,
@@ -89,6 +123,25 @@ const LEVELS = [
       backgroundScrollSpeed: 0.8,
       roadScrollSpeed: 7,
       showDebugLanes: false
+    },
+
+    story: {
+      before: [
+        {
+          imageKey: 'story_costa_1',
+          text: 'La costa aparece bajo tormenta. El destino está cerca, pero el tiempo se agota.'
+        },
+        {
+          imageKey: 'story_costa_2',
+          text: 'La costa aparece bajo tormenta. El destino está cerca, pero el tiempo se agota.'
+        }
+      ],
+      after: [
+        {
+          imageKey: 'story_final_1',
+          text: 'El mensaje finalmente llega a destino. La misión del chasqui se ha cumplido.'
+        }
+      ]
     },
 
     theme: {

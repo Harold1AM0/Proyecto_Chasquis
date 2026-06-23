@@ -5,6 +5,7 @@ import MenuScene     from './scenes/MenuScene.js';
 import GameScene     from './scenes/GameScene.js';
 import GameOverScene from './scenes/GameOverScene.js';
 import WinScene from './scenes/WinScene.js';
+import StoryScene from './scenes/StoryScene.js';
 
 const config = {
   type: Phaser.AUTO,
@@ -16,7 +17,7 @@ const config = {
     default: 'arcade',
     arcade: { debug: false }
   },
-  scene: [PreloadScene, MenuScene, GameScene, GameOverScene, WinScene]
+  scene: [PreloadScene, MenuScene, GameScene, GameOverScene, WinScene, StoryScene]
 };
 
 new Phaser.Game(config);

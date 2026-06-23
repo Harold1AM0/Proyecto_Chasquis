@@ -10,6 +10,8 @@ import VoiceCommandManager from '../managers/VoiceCommandManager.js';
 import LevelManager from '../managers/LevelManager.js';
 import AudioManager from '../managers/AudioManager.js';
 
+import LEVELS from '../data/levels.js';
+
 import Hud from '../ui/Hud.js';
 import VoiceDebugPanel from '../ui/VoiceDebugPanel.js';
 
@@ -66,7 +68,7 @@ export default class GameScene extends Phaser.Scene {
       onToggleVoice: () => this.voiceCommandManager.toggle()
     });
 
-    const VOICE_DEBUG = true;  //Mostrar panel de debug de voz (comandos, transcripciones, etc)
+    const VOICE_DEBUG = true;
 
     this.voiceDebugPanel = VOICE_DEBUG
       ? new VoiceDebugPanel(this)
@@ -179,7 +181,8 @@ export default class GameScene extends Phaser.Scene {
     this.voiceCommandManager.stop();
     this.obstacleManager.stopAll();
 
-    const currentTotalScore = this.previousScore + this.scoreManager.getFinalScore();
+    const currentTotalScore =
+      this.previousScore + this.scoreManager.getFinalScore();
 
     const levelCompleteText = this.add
       .text(
@@ -206,9 +209,45 @@ export default class GameScene extends Phaser.Scene {
       delay: 700,
       onComplete: () => {
         if (this.levelManager.hasNextLevel()) {
-          this.scene.start('GameScene', {
-            levelIndex: this.levelManager.getNextLevelIndex(),
-            previousScore: currentTotalScore
+          const nextLevelIndex = this.levelManager.getNextLevelIndex();
+          const nextLevel = LEVELS[nextLevelIndex];
+
+          const currentAfterSlides = this.currentLevel.story?.after ?? [];
+          const nextBeforeSlides = nextLevel.story?.before ?? [];
+
+          const slides = [
+            ...currentAfterSlides,
+            ...nextBeforeSlides
+          ];
+
+          if (slides.length > 0) {
+            this.scene.start('StoryScene', {
+              slides,
+              nextScene: 'GameScene',
+              nextData: {
+                levelIndex: nextLevelIndex,
+                previousScore: currentTotalScore
+              }
+            });
+          } else {
+            this.scene.start('GameScene', {
+              levelIndex: nextLevelIndex,
+              previousScore: currentTotalScore
+            });
+          }
+
+          return;
+        }
+
+        const endingSlides = this.currentLevel.story?.after ?? [];
+
+        if (endingSlides.length > 0) {
+          this.scene.start('StoryScene', {
+            slides: endingSlides,
+            nextScene: 'WinScene',
+            nextData: {
+              score: currentTotalScore
+            }
           });
         } else {
           this.scene.start('WinScene', {
