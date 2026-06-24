@@ -1,4 +1,4 @@
-const durationPerLevel = 2000;
+const durationPerLevel = 20000;
 
 const LEVELS = [
   {
@@ -42,6 +42,33 @@ const LEVELS = [
       ]
     },
 
+    obstacles: [
+      {
+        id: 'roca_valle',
+        texture: 'obs_roca_valle',
+        points: 50,
+        bodyWidth: 0.65,
+        bodyHeight: 0.55,
+        yOffset: 8
+      },
+      {
+        id: 'arbusto_valle',
+        texture: 'obs_arbusto_valle',
+        points: 50,
+        bodyWidth: 0.7,
+        bodyHeight: 0.5,
+        yOffset: 8
+      },
+      {
+        id: 'oso_valle',
+        texture: 'obs_oso_valle',
+        points: 75,
+        bodyWidth: 0.65,
+        bodyHeight: 0.75,
+        yOffset: 0
+      }
+    ],
+
     theme: {
       skyColor: 0x79cfff,
       horizonColor: 0x8fcf72,
@@ -51,7 +78,8 @@ const LEVELS = [
       hudTextColor: '#ffcc00',
       hudBarColor: 0xffcc00,
       obstacleTint: 0xffffff
-    }
+    },
+
   },
 
   {
@@ -90,6 +118,41 @@ const LEVELS = [
         }
       ]
     },
+
+    obstacles: [
+      {
+        id: 'roca_noche',
+        texture: 'obs_roca_noche',
+        points: 50,
+        bodyWidth: 0.65,
+        bodyHeight: 0.55,
+        yOffset: 8
+      },
+      {
+        id: 'arbusto_noche',
+        texture: 'obs_arbusto_noche',
+        points: 50,
+        bodyWidth: 0.7,
+        bodyHeight: 0.5,
+        yOffset: 8
+      },
+      {
+        id: 'tronco_noche',
+        texture: 'obs_tronco_noche',
+        points: 65,
+        bodyWidth: 0.8,
+        bodyHeight: 0.45,
+        yOffset: 12
+      },
+      {
+        id: 'serpiente_noche',
+        texture: 'obs_serpiente_noche',
+        points: 80,
+        bodyWidth: 0.8,
+        bodyHeight: 0.35,
+        yOffset: 16
+      }
+    ],
 
     theme: {
       skyColor: 0x071421,
@@ -147,6 +210,25 @@ const LEVELS = [
         }
       ]
     },
+
+    obstacles: [
+      {
+        id: 'conquistador',
+        texture: 'conquistador',
+        points: 100,
+        bodyWidth: 0.6,
+        bodyHeight: 0.8,
+        yOffset: 0
+      },
+      {
+        id: 'cactus_costa',
+        texture: 'obs_cactus_costa',
+        points: 75,
+        bodyWidth: 0.55,
+        bodyHeight: 0.85,
+        yOffset: 0
+      }
+    ],
 
     theme: {
       skyColor: 0x2c3440,

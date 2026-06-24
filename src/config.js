@@ -28,14 +28,14 @@ export const GAME_CONFIG = {
 
   player: {
     x: Math.round(WIDTH * 0.16),
-    width: 40,
-    height: 64,
+    width: 56,
+    height: 80,
     texture: 'chasqui'
   },
 
   obstacle: {
-    width: 44,
-    height: 64,
+    width: 60,
+    height: 82,
     speedBase: 220,
     speedMax: 520,
     speedIncrement: 18,
